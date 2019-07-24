@@ -430,7 +430,7 @@ helloworld
 
 关于上述代码在实际开发中有几个需要注意的事项，这里逐一来说明一下：
 
-1. **select 函数调用前后会修改 readfds、writefds 和 exceptfds 这三个集合中的内容（如果有的话），所以如果您想下次调用 select 复用这个变量，记得在下次调用前再次调用 select 前先使用 FD_ZERO 将集合清零，然后调用 FD_SET 将需要检测事件的 fd 再次添加进去**。
+1. **select 函数调用前后会修改 readfds、writefds 和 exceptfds 这三个集合中的内容（如果有的话），所以如果您想下次调用 select 复用这个变量，记得在下次调用前再次调用 select 前先使用 FD_ZERO 将集合清零（因为是fd_set函数 |= ），然后调用 FD_SET 将需要检测事件的 fd 再次添加进去**。
 
    > select 函数调用之后，**readfds**、**writefds** 和 **exceptfds** 这三个集合中存放的不是我们之前设置进去的 fd，而是有相关有读写或异常事件的 fd，也就是说 select 函数会修改这三个参数的内容，这也要求我们**当一个 fd_set 被 select 函数调用后，这个 fd_set 就已经发生了改变，下次如果我们需要使用它，必须使用 FD_ZERO 宏先清零，再重新将我们关心的 fd 设置进去**。这点我们从 **FD_ISSET** 源码也可以看出来：
 
