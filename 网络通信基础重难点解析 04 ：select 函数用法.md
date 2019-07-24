@@ -114,8 +114,7 @@ int select(int nfds,
   # endif
   
   # define __FD_ZERO(fdsp) \
-    do {                                                                        \
-      int __d0, __d1;                                                           \
+    do {                                                                              int __d0, __d1;                                                           \
       __asm__ __volatile__ ("cld; rep; " __FD_ZERO_STOS                         \
                             : "=c" (__d0), "=D" (__d1)                          \
                             : "a" (0), "0" (sizeof (fd_set)                     \
@@ -172,7 +171,7 @@ int select(int nfds,
   ```
   typedef struct
   { 
-      long int __fds_bits[16];	//可以看成是128 bit的数组 
+      long int __fds_bits[16];	//可以看成是128 个字节的数组 
   } fd_set;
   ```
 
