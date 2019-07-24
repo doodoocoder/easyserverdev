@@ -205,7 +205,7 @@ int  FD_ISSET(int fd, fd_set *set);
   #define __FD_ISSET(d, set) \
     ((__FDS_BITS (set)[__FD_ELT (d)] & __FD_MASK (d)) != 0)
   ```
-
+这里是取数组中对应的索引的值和d(filedescriptor) ((long int) 1 << ((d) % __NFDBITS))在64位置中的位置求与，要么一样，要么不同(结果就是0)
 > 提醒一下： __FD_ELT 和 __FD_MASK 宏前文的代码已经给过具体实现了。
 
 - 参数 **timeout**，超时时间，即在这个参数设定的时间内检测这些 fd 的事件，超过这个时间后 **select** 函数将立即返回。这是一个 **timeval** 类型结构体，其定义如下：
