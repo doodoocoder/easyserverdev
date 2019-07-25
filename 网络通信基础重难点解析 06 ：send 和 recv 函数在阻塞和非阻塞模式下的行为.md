@@ -441,7 +441,7 @@ listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes
 
 当每次 **blocking_client** 给 **blocking_server** 发数据以后，**blocking_server** 会应答 **blocking_client**，在每次应答的数据包中会带上自己的当前可用 TCP 窗口大小（看上文中结果从 **127.0.0.1.3000 > 127.0.0.1.40846** 方向的数据包的 **win** 字段大小变化），由于 TCP 流量控制和拥赛控制机制的存在，**blocking_server** 端的 TCP 窗口大小短期内会慢慢增加，后面随着接收缓冲区中数据积压越来越多， TCP 窗口会慢慢变小，最终变为 0。
 
-另外，细心的读者如果实际去做一下这个实验会发现一个现象，即当 tcpdump 已经显示对端的 TCP 窗口是 0 时， **blocking_client** 仍然可以继续发送一段时间的数据，此时的数据已经不是在发往对端，而是逐渐填满到本端的内核发送缓冲区中去了，这也验证了 send 函数实际上是往内核缓冲区中拷贝数据这一行为。
+另外，细心的读者如果实际去做一下这个实验会发现一个现象，即当 tcpdump 已经显示对端(blocking_server)的 TCP 窗口是 0 时， **blocking_client** 仍然可以继续发送一段时间的数据，此时的数据已经不是在发往对端，而是逐渐填满到本端的内核发送缓冲区中去了，这也验证了 send 函数实际上是往内核缓冲区中拷贝数据这一行为。那么**blocking_client**以前发送的数据在哪？由系统帮blocking_server接收到内核缓冲区了，只是它没有recv而已。
 
 
 
