@@ -1,6 +1,6 @@
 /**
  * select函数示例，server端, select_server.cpp
- * add send data back to client
+ * zhangyl 2018.12.24
  */
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -125,13 +125,13 @@ int main(int argc, char* argv[])
                             clientfds[i] = INVALID_FD;
                             continue;
                         }else{
-                            std::cout << "recv data from client, data: " << recvbuf << std::endl;
+                            std::cout << "recv data from client, data: " << recvbuf <<" from client "<<clientfds[i] << std::endl;
                             //6. 将收到的数据原封不动地发给客户端
                             ret = send(clientfds[i], recvbuf, strlen(recvbuf), 0);
                             if (ret != strlen(recvbuf))
                                 std::cout << "send data error." << std::endl;
+                            std::cout << "send data to client successfully, data: " << recvbuf << " to "<< clientfds[i] <<std::endl;
                             clientfds[i] = INVALID_FD;
-                            std::cout << "send data to client successfully, data: " << recvbuf << std::endl;
                         }
 
 
