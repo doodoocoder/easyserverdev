@@ -106,16 +106,34 @@ int main(int argc, char* argv[])
             }
             else
             {
+
                 //假设对端发来的数据长度不超过63个字符
-                char recvbuf[64];
+                char recvbuf[50];
                 int clientfdslength = clientfds.size();
                 for (int i = 0; i < clientfdslength; ++i)
                 {
                     if (clientfds[i] != -1 && FD_ISSET(clientfds[i], &readset))
                     {
                         memset(recvbuf, 0, sizeof(recvbuf));
-                        //非侦听socket，则接收数据
-                        int length = recv(clientfds[i], recvbuf, 64, 0);
+                        //非侦听socket，则接收(move)数据
+                        int length = recv(clientfds[i], recvbuf, 50, 0);
+                        if(length == 50){//print kernel buf == 50
+                            std::cout << "recv data from client, data: " << recvbuf <<" from client "<<clientfds[i] << std::endl;
+                            //6. 将收到的数据原封不动地发给客户端
+                            ret = send(clientfds[i], recvbuf, strlen(recvbuf), 0);
+                            if (ret != strlen(recvbuf))
+                                std::cout << "send data error." << std::endl;
+                            std::cout << "send data to client successfully, data: " << recvbuf << " to "<< clientfds[i] <<std::endl;
+                            clientfds[i] = INVALID_FD;
+                            continue;
+                        }
+                        std::cout<<"fd: "<<clientfds[i]<<"length is: "<<length<<std::endl;
+                        length = recv(clientfds[i], recvbuf, 50, 0);
+                        std::cout<<"fd: "<<clientfds[i]<<"length is: "<<length<<std::endl;
+                        length = recv(clientfds[i], recvbuf, 50, 0);
+                        std::cout<<"fd: "<<clientfds[i]<<"length is: "<<length<<std::endl;
+
+
                         if (length <= 0 && errno != EINTR)
                         {
                             //收取数据出错了
@@ -124,7 +142,9 @@ int main(int argc, char* argv[])
                             //不直接删除该元素，将该位置的元素置位-1
                             clientfds[i] = INVALID_FD;
                             continue;
-                        }else{
+                        }/*else{
+
+
                             std::cout << "recv data from client, data: " << recvbuf <<" from client "<<clientfds[i] << std::endl;
                             //6. 将收到的数据原封不动地发给客户端
                             ret = send(clientfds[i], recvbuf, strlen(recvbuf), 0);
@@ -132,7 +152,7 @@ int main(int argc, char* argv[])
                                 std::cout << "send data error." << std::endl;
                             std::cout << "send data to client successfully, data: " << recvbuf << " to "<< clientfds[i] <<std::endl;
                             clientfds[i] = INVALID_FD;
-                        }
+                        }*/
 
 
                     }
