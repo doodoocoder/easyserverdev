@@ -38,7 +38,7 @@ int my_send(){
 
     //3. 不断向服务器发送数据，或者出错退出
     int count = 0;
-    while (count<5&&true)
+    while (count<5)
     {
         int ret = send(clientfd, SEND_DATA, strlen(SEND_DATA), 0);
         if (ret != strlen(SEND_DATA))
@@ -48,8 +48,8 @@ int my_send(){
         }
         else
         {
+           printf("send data successfully, count =%d \n",count) ;
             count ++;
-            std::cout << "send data successfully, count = " << count << std::endl;
         }
     }
 
