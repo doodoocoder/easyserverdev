@@ -1,6 +1,6 @@
 /**
  * select函数示例，server端, select_server.cpp
- * zhangyl 2018.12.24
+ * 证明recv函数是从socket fd中move数据，详见 是从socket fd中move数据.png 
  */
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
             else
             {
 
-                //假设对端发来的数据长度不超过63个字符
+                
                 char recvbuf[50];
                 int clientfdslength = clientfds.size();
                 for (int i = 0; i < clientfdslength; ++i)
