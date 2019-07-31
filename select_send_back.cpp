@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
                         memset(recvbuf, 0, sizeof(recvbuf));
                         //非侦听socket，则接收(move)数据
                         int length = recv(clientfds[i], recvbuf, 50, 0);
-                        if(length == 50){//print kernel buf == 50
+                        if(length == 50){//当一次性读取socket fd的长度为50bytes时，才打印
                             std::cout << "recv data from client, data: " << recvbuf <<" from client "<<clientfds[i] << std::endl;
                             //6. 将收到的数据原封不动地发给客户端
                             ret = send(clientfds[i], recvbuf, strlen(recvbuf), 0);
